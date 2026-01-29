@@ -11,8 +11,11 @@ export const authService = {
   },
 
   async logout() {
-    await api.post('/api/auth/logout');
-    Cookies.remove('auth_token');
+    try {
+      await api.post('/api/auth/logout');
+    } finally {
+      Cookies.remove('auth_token');
+    }
   },
 
   async getCurrentUser() {

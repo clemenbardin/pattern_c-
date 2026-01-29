@@ -2,8 +2,14 @@ using System;
 
 namespace BankDocumentSystem
 {
+    // Type commun pour les documents bancaires (évite l'erreur CS0826 sur les tableaux)
+    public interface IBankDocument
+    {
+        string Generate();
+    }
+
     // 1. Produits abstraits
-    public abstract class ReleveIdentiteBancaire
+    public abstract class ReleveIdentiteBancaire : IBankDocument
     {
         protected string Logo { get; } = "LOGO_BANQUE";
         protected string Titre { get; set; }
@@ -16,7 +22,7 @@ namespace BankDocumentSystem
         }
     }
 
-    public abstract class AttestationCompte
+    public abstract class AttestationCompte : IBankDocument
     {
         protected string Logo { get; } = "LOGO_BANQUE";
         protected string Titre { get; set; }
@@ -173,7 +179,7 @@ namespace BankDocumentSystem
                 ? new ParticulierFactory() 
                 : new ProfessionnelFactory();
             
-            var documents = new[]
+            IBankDocument[] documents = new IBankDocument[]
             {
                 factory.CreateRIB(),
                 factory.CreateAttestation()

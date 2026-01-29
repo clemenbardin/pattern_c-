@@ -21,6 +21,10 @@ export const AuthProvider = ({ children }) => {
         try {
           const currentUser = await authService.getCurrentUser();
           setUser(currentUser);
+          if (!currentUser) {
+            // Token invalide ou expiré
+            authService.logout();
+          }
         } catch (error) {
           authService.logout();
         }
@@ -32,8 +36,8 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (username, password) => {
     const data = await authService.login(username, password);
-    const currentUser = await authService.getCurrentUser();
-    setUser(currentUser);
+    // Utiliser la réponse du login pour éviter un 2e appel /me qui peut échouer (CORS, URL API)
+    setUser(data?.username ? { username: data.username, role: data.role } : null);
     return data;
   };
 

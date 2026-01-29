@@ -8,6 +8,8 @@ RUN npm install
 
 # Copie du reste et build
 COPY . .
+ARG VITE_API_URL=http://localhost:3000
+ENV VITE_API_URL=$VITE_API_URL
 RUN npm run build
 
 # Étape de production avec Nginx
